@@ -1,0 +1,62 @@
+#
+# Copyright (c) 2011-present Sonatype, Inc. All rights reserved.
+# Includes the third-party code listed at http://links.sonatype.com/products/clm/attributions.
+# "Sonatype" is a trademark of Sonatype, Inc.
+#
+
+name: Test AGP Action (GUIDE-1418)
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: 'Run in dry-run mode'
+        required: true
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+jobs:
+  test-agp:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Test AGP Action (Composite + Pre-built Image)
+        uses: sonatype/agp-action@GUIDE-1418-implement-composite-action
+        with:
+          working-directory: '.'
+          create-pr: true
+          draft-pr: true
+          dry-run: ${{ inputs.dry-run }}
+          verbose: true
+          validation-commands: |
+            npm run build
+            npm test
+
+          # Docker Registry Configuration (Sonatype internal)
+          docker-registry: docker-all.repo.sonatype.com
+          docker-username: ${{ secrets.DOCKER_USERNAME }}
+          docker-password: ${{ secrets.DOCKER_PASSWORD }}
+
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          AGP_API_TOKEN: ${{ secrets.AGP_API_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Test Summary
+        if: always()
+        run: |
+          echo "✅ Test completed"
+          echo ""
+          echo "Action tested: sonatype/agp-action@GUIDE-1418-implement-composite-action"
+          echo "Registry used: docker-all.repo.sonatype.com"
+          echo "Dry run: ${{ inputs.dry-run }}"
