@@ -143,6 +143,7 @@ runs:
         # Run AGP container
         docker run --rm \
           -v "${{ github.workspace }}:/github/workspace" \
+          -v /opt/homebrew/bin/gh:/usr/local/bin/gh:ro \
           -w /github/workspace \
           -e ANTHROPIC_API_KEY \
           -e AGP_API_TOKEN \
