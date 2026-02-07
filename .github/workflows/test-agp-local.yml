@@ -11,6 +11,16 @@ on:
         options:
           - 'true'
           - 'false'
+      git-user-name:
+        description: 'Git user name for commits'
+        required: false
+        default: 'johnatan-velez'
+        type: string
+      git-user-email:
+        description: 'Git user email for commits'
+        required: false
+        default: 'jonathan.v.giraldo@gmail.com'
+        type: string
 
 jobs:
   test-agp-local:
@@ -31,6 +41,10 @@ jobs:
           validation-commands: |
             npm run build
             npm test
+
+          # Git Configuration
+          git-user-name: ${{ inputs.git-user-name }}
+          git-user-email: ${{ inputs.git-user-email }}
 
           # Docker Registry Configuration
           docker-registry: docker-all.repo.sonatype.com
