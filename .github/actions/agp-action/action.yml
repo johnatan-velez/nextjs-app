@@ -149,6 +149,8 @@ runs:
           -e AGP_API_TOKEN \
           -e AGP_API_URL \
           -e GITHUB_TOKEN \
+          -e GH_TOKEN="${{ env.GITHUB_TOKEN }}" \
+          -e GITHUB_REPOSITORY="${{ github.repository }}" \
           -e GIT_AUTHOR_NAME="${{ inputs.git-user-name }}" \
           -e GIT_AUTHOR_EMAIL="${{ inputs.git-user-email }}" \
           -e GIT_COMMITTER_NAME="${{ inputs.git-user-name }}" \
