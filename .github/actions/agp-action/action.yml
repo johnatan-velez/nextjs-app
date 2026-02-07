@@ -131,6 +131,10 @@ runs:
         INPUT_GIT_USER_NAME: ${{ inputs.git-user-name }}
         INPUT_GIT_USER_EMAIL: ${{ inputs.git-user-email }}
       run: |
+        # Configure Git for commits
+        git config --global user.name "${{ inputs.git-user-name }}"
+        git config --global user.email "${{ inputs.git-user-email }}"
+
         # Determine Docker image to use
         REGISTRY="${{ inputs.docker-registry }}"
         IMAGE="${REGISTRY}/sonatype/agp:latest"
