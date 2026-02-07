@@ -1,0 +1,166 @@
+# Copyright (c) 2011-present Sonatype, Inc. All rights reserved.
+# Includes the third-party code listed at http://links.sonatype.com/products/clm/attributions.
+# "Sonatype" is a trademark of Sonatype, Inc.
+
+name: "AGP - Agentic Patches"
+description: "AI-powered dependency upgrades for npm projects using pre-built Docker image"
+author: "Sonatype"
+
+branding:
+  icon: "package"
+  color: "blue"
+
+inputs:
+  working-directory:
+    description: "Directory containing package.json"
+    required: false
+    default: "."
+  node-version:
+    description: "Node.js version to use (20 or 22)"
+    required: false
+    default: "22"
+  create-pr:
+    description: "Create GitHub PRs for upgrades"
+    required: false
+    default: "false"
+  draft-pr:
+    description: "Create PRs as drafts"
+    required: false
+    default: "false"
+  enable-agent:
+    description: "Enable AI agent for fixing validation failures"
+    required: false
+    default: "true"
+  max-fix-attempts:
+    description: "Maximum AI fix attempts per group"
+    required: false
+    default: "3"
+  dry-run:
+    description: "Preview changes without applying them"
+    required: false
+    default: "false"
+  group:
+    description: "Apply only a specific group by ID"
+    required: false
+    default: ""
+  validation-commands:
+    description: "Commands to validate upgrades (newline-separated)"
+    required: false
+    default: ""
+  npmrc-content:
+    description: "Base64-encoded .npmrc content (with tokens included)"
+    required: false
+    default: ""
+  anthropic-base-url:
+    description: "Custom Anthropic API endpoint"
+    required: false
+    default: ""
+  verbose:
+    description: "Enable verbose output"
+    required: false
+    default: "false"
+  # Docker registry configuration
+  docker-registry:
+    description: "Docker registry to pull AGP image from (default: ghcr.io, supports docker-all.repo.sonatype.com)"
+    required: false
+    default: "ghcr.io"
+  docker-username:
+    description: "Docker registry username (required only for private registries like docker-all.repo.sonatype.com)"
+    required: false
+    default: ""
+  docker-password:
+    description: "Docker registry password (required only for private registries)"
+    required: false
+    default: ""
+
+outputs:
+  run-id:
+    description: "AGP run tracking ID"
+    value: ${{ steps.parse-outputs.outputs.run-id }}
+  groups-upgraded:
+    description: "Number of groups successfully upgraded"
+    value: ${{ steps.parse-outputs.outputs.groups-upgraded }}
+  groups-failed:
+    description: "Number of groups that failed"
+    value: ${{ steps.parse-outputs.outputs.groups-failed }}
+  pr-urls:
+    description: "JSON array of created PR URLs"
+    value: ${{ steps.parse-outputs.outputs.pr-urls }}
+
+runs:
+  using: "composite"
+  steps:
+    # Optional: Login to Docker registry if credentials provided
+    - name: Login to Docker Registry
+      if: ${{ inputs.docker-username != '' && inputs.docker-password != '' }}
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ inputs.docker-registry }}
+        username: ${{ inputs.docker-username }}
+        password: ${{ inputs.docker-password }}
+
+    # Run AGP using pre-built Docker image
+    - name: Run AGP
+      id: run-agp
+      shell: bash
+      env:
+        ANTHROPIC_API_KEY: ${{ env.ANTHROPIC_API_KEY }}
+        AGP_API_TOKEN: ${{ env.AGP_API_TOKEN }}
+        AGP_API_URL: ${{ env.AGP_API_URL }}
+        GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+        INPUT_WORKING_DIRECTORY: ${{ inputs.working-directory }}
+        INPUT_NODE_VERSION: ${{ inputs.node-version }}
+        INPUT_CREATE_PR: ${{ inputs.create-pr }}
+        INPUT_DRAFT_PR: ${{ inputs.draft-pr }}
+        INPUT_ENABLE_AGENT: ${{ inputs.enable-agent }}
+        INPUT_MAX_FIX_ATTEMPTS: ${{ inputs.max-fix-attempts }}
+        INPUT_DRY_RUN: ${{ inputs.dry-run }}
+        INPUT_GROUP: ${{ inputs.group }}
+        INPUT_VALIDATION_COMMANDS: ${{ inputs.validation-commands }}
+        INPUT_NPMRC_CONTENT: ${{ inputs.npmrc-content }}
+        INPUT_ANTHROPIC_BASE_URL: ${{ inputs.anthropic-base-url }}
+        INPUT_VERBOSE: ${{ inputs.verbose }}
+      run: |
+        # Determine Docker image to use
+        REGISTRY="${{ inputs.docker-registry }}"
+        IMAGE="${REGISTRY}/sonatype/agp:latest"
+
+        echo "📦 Using AGP Docker image: ${IMAGE}"
+
+        # Pull the image
+        docker pull "${IMAGE}"
+
+        # Run AGP container
+        docker run --rm \
+          -v "${{ github.workspace }}:/github/workspace" \
+          -w /github/workspace \
+          -e ANTHROPIC_API_KEY \
+          -e AGP_API_TOKEN \
+          -e AGP_API_URL \
+          -e GITHUB_TOKEN \
+          -e GITHUB_OUTPUT=/tmp/github_output \
+          -e INPUT_WORKING_DIRECTORY \
+          -e INPUT_NODE_VERSION \
+          -e INPUT_CREATE_PR \
+          -e INPUT_DRAFT_PR \
+          -e INPUT_ENABLE_AGENT \
+          -e INPUT_MAX_FIX_ATTEMPTS \
+          -e INPUT_DRY_RUN \
+          -e INPUT_GROUP \
+          -e INPUT_VALIDATION_COMMANDS \
+          -e INPUT_NPMRC_CONTENT \
+          -e INPUT_ANTHROPIC_BASE_URL \
+          -e INPUT_VERBOSE \
+          "${IMAGE}"
+
+    # Parse outputs from AGP run (if any)
+    - name: Parse Outputs
+      id: parse-outputs
+      shell: bash
+      run: |
+        # Placeholder for output parsing
+        # In the future, AGP will write outputs to GITHUB_OUTPUT
+        echo "run-id=" >> $GITHUB_OUTPUT
+        echo "groups-upgraded=" >> $GITHUB_OUTPUT
+        echo "groups-failed=" >> $GITHUB_OUTPUT
+        echo "pr-urls=" >> $GITHUB_OUTPUT
