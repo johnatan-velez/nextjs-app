@@ -34,8 +34,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Test AGP Action (Published Release v1)
-        uses: sonatype/agp-action@v1
+      - name: Test AGP Action (Local Copy for Testing)
+        uses: ./.github/actions/agp-action
         with:
           working-directory: '.'
           create-pr: true
@@ -65,6 +65,6 @@ jobs:
         if: always()
         run: |
           echo "✅ Test completed on self-hosted runner"
-          echo "Action: sonatype/agp-action@v1"
+          echo "Action: Local copy (mirrors sonatype/agp-action@v1)"
           echo "Dry run: ${{ inputs.dry-run }}"
           echo "Git user: ${{ inputs.git-user-name }} <${{ inputs.git-user-email }}>"
