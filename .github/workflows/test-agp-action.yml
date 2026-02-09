@@ -17,6 +17,16 @@ on:
         options:
           - 'true'
           - 'false'
+      git-user-name:
+        description: 'Git user name for commits'
+        required: false
+        default: 'AGP Bot'
+        type: string
+      git-user-email:
+        description: 'Git user email for commits'
+        required: false
+        default: 'agp-bot@sonatype.com'
+        type: string
 
 jobs:
   test-agp:
@@ -30,8 +40,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Test AGP Action (Composite + Pre-built Image)
-        uses: sonatype/agp-action@GUIDE-1418-implement-composite-action
+      - name: Test AGP Action (Published Release v1)
+        uses: sonatype/agp-action@v1
         with:
           working-directory: '.'
           create-pr: true
@@ -41,6 +51,10 @@ jobs:
           validation-commands: |
             npm run build
             npm test
+
+          # Git Configuration
+          git-user-name: ${{ inputs.git-user-name }}
+          git-user-email: ${{ inputs.git-user-email }}
 
           # Docker Registry Configuration (Sonatype internal)
           docker-registry: docker-all.repo.sonatype.com
@@ -57,6 +71,7 @@ jobs:
         run: |
           echo "✅ Test completed"
           echo ""
-          echo "Action tested: sonatype/agp-action@GUIDE-1418-implement-composite-action"
+          echo "Action tested: sonatype/agp-action@v1"
           echo "Registry used: docker-all.repo.sonatype.com"
           echo "Dry run: ${{ inputs.dry-run }}"
+          echo "Git user: ${{ inputs.git-user-name }} <${{ inputs.git-user-email }}>"
