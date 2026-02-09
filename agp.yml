@@ -1,0 +1,22 @@
+# AGP Configuration for nextjs-app
+version: "1"
+
+# Enable AI agent for fixing validation failures
+agent:
+  enabled: true
+  model: "claude-sonnet-4-5"
+  maxFixAttempts: 3
+
+# Validation commands to run after applying updates
+validation:
+  enabled: true
+  commands:
+    - npm run build
+    - npm test
+
+# Pull request configuration
+pr:
+  draft: true
+  labels:
+    - dependencies
+    - automated
