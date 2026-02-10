@@ -19,7 +19,7 @@ agent:
   maxIterations: 10                      # Max agent loops per fix
   maxFixAttempts: 3                      # Max fix attempts per group
   apiKeyEnv: "ANTHROPIC_API_KEY"        # Env var for API key
-  baseUrl: "http://host.docker.internal:8000"  # Custom API endpoint (tu LLM local)
+  baseUrl: "https://llm-dev.sonatype.com"  # Custom API endpoint
   timeout: "30m"                         # Agent timeout
   maxTokens: 100000                      # Max tokens per fix attempt
   warnTokensAt: 50000                    # Warn when exceeding this
