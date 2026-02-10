@@ -1,24 +1,71 @@
 # AGP Configuration for nextjs-app
+# Complete configuration with defaults and customizations
+
 version: "1"
 
-# Enable AI agent for fixing validation failures
-# Temporarily disabled: macOS binary can't run in Linux container
-agent:
-  enabled: false
-  model: "claude-sonnet-4-5"
-  maxFixAttempts: 3
+# ━━━ API Configuration ━━━
+# Backend API for tracking and recommendations
+api:
+  # url and token are set via env vars: AGP_API_URL, AGP_API_TOKEN
+  # url: "https://guide-dev.sonatype.com"
+  # token: "your-token"
 
-# Validation commands to run after applying updates
-# Disabled: nextjs-app requires DB credentials
+# ━━━ Agent Configuration ━━━
+# AI-powered fixes for validation failures
+agent:
+  enabled: true                          # Enable AI agent
+  provider: "anthropic"                  # AI provider (default: anthropic)
+  model: "claude-sonnet-4-5"            # Model to use
+  maxIterations: 10                      # Max agent loops per fix
+  maxFixAttempts: 3                      # Max fix attempts per group
+  apiKeyEnv: "ANTHROPIC_API_KEY"        # Env var for API key
+  # baseUrl: "https://api.anthropic.com" # Custom API endpoint (optional)
+  timeout: "30m"                         # Agent timeout
+  maxTokens: 100000                      # Max tokens per fix attempt
+  warnTokensAt: 50000                    # Warn when exceeding this
+
+# ━━━ Validation Configuration ━━━
+# Commands to run after applying updates
 validation:
-  enabled: false
+  enabled: false                         # Disabled: requires DB credentials
   commands:
     - npm run build
     - npm test
+  timeout: "10m"                         # Validation timeout
 
-# Pull request configuration
+# ━━━ Pull Request Configuration ━━━
+# Configuration for created PRs
 pr:
-  draft: true
-  labels:
+  # titleTemplate: "Update {{packages}}"  # Custom PR title (optional)
+  # bodyTemplate: "..."                   # Custom PR body (optional)
+  draft: true                             # Create PRs as drafts
+  labels:                                 # Labels to add to PRs
     - dependencies
     - automated
+  # reviewers:                            # Auto-assign reviewers (optional)
+  #   - "@team/reviewers"
+  # branchTemplate: "agp/{{type}}/{{id}}" # Custom branch naming (optional)
+
+# ━━━ Ignore Configuration ━━━
+# Packages or paths to exclude from updates
+ignore:
+  packages: []                            # Packages to never update
+  # packages:
+  #   - "typescript"                      # Example: pin TypeScript version
+  #   - "@types/*"                        # Example: ignore all @types
+  paths: []                               # Paths to ignore
+  # paths:
+  #   - "examples/**"
+  #   - "docs/**"
+
+# ━━━ Grouping Configuration ━━━
+# How to group dependency updates
+grouping:
+  strategy: "smart"                       # smart, manual, or all-together
+  # rules:                                # Custom grouping rules (optional)
+  #   - name: "React ecosystem"
+  #     match:
+  #       - "react"
+  #       - "react-dom"
+  #       - "@types/react"
+  #     strategy: "together"
