@@ -131,21 +131,40 @@ runs:
         INPUT_GIT_USER_NAME: ${{ inputs.git-user-name }}
         INPUT_GIT_USER_EMAIL: ${{ inputs.git-user-email }}
       run: |
-        # TEMPORARY: Use local test image instead of pulling from registry
+        # TEMPORARY: Use latest image but replace AGP binary with local build
         REGISTRY="${{ inputs.docker-registry }}"
-        IMAGE="${REGISTRY}/sonatype/agp:test"
+        IMAGE="${REGISTRY}/sonatype/agp:latest"
 
-        echo "📦 Using AGP Docker image: ${IMAGE} (local test build)"
+        echo "📦 Using AGP Docker image: ${IMAGE}"
 
-        # Skip pull - using local image
-        # docker pull "${IMAGE}"
+        # Pull the latest image
+        docker pull "${IMAGE}"
+
+        # Copy updated AGP binary from seaworthy repo to a temp location
+        # This binary has the authentication fix
+        SEAWORTHY_PATH="/Users/johnatan/IdeaProjects/seaworthy"
+        if [ -f "${SEAWORTHY_PATH}/agentic-patches-ts/dist/agp-linux-x64" ]; then
+          echo "📝 Found updated AGP binary, will inject into container"
+          cp "${SEAWORTHY_PATH}/agentic-patches-ts/dist/agp-linux-x64" /tmp/agp-updated
+          INJECT_BINARY=true
+        else
+          echo "⚠️  Updated AGP binary not found, using version from image"
+          INJECT_BINARY=false
+        fi
 
         # Run AGP container (gh CLI included in image)
         # Install Claude Code at runtime as temporary workaround
         # Force linux/amd64 platform for compatibility with ARM64 Macs
+        # Mount updated binary if available
+        MOUNT_OPTS=""
+        if [ "${INJECT_BINARY}" = "true" ]; then
+          MOUNT_OPTS="-v /tmp/agp-updated:/usr/local/bin/agp"
+        fi
+
         docker run --rm \
           --platform linux/amd64 \
           -v "${{ github.workspace }}:/github/workspace" \
+          ${MOUNT_OPTS} \
           -w /github/workspace \
           --entrypoint /bin/bash \
           -e ANTHROPIC_API_KEY \
