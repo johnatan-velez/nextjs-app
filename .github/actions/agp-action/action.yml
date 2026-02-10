@@ -173,7 +173,7 @@ runs:
           -e INPUT_GIT_USER_NAME \
           -e INPUT_GIT_USER_EMAIL \
           "${IMAGE}" \
-          -c "npm install -g @anthropic-ai/claude-code && /entrypoint.sh"
+          -c "npm install -g @anthropic-ai/claude-code && echo '=== Testing Claude Code ===' && echo 'ANTHROPIC_API_KEY is set:' && test -n \"\$ANTHROPIC_API_KEY\" && echo 'YES' || echo 'NO' && echo 'Running claude --version:' && claude --version 2>&1 && echo '=== Starting entrypoint ===' && /entrypoint.sh"
 
     # Parse outputs from AGP run (if any)
     - name: Parse Outputs
