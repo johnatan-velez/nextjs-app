@@ -50,9 +50,6 @@ jobs:
           git-user-name: ${{ inputs.git-user-name }}
           git-user-email: ${{ inputs.git-user-email }}
 
-          # Anthropic Configuration
-          anthropic-base-url: "http://host.docker.internal:8000"  # Tu LLM local
-
           # Docker Registry Configuration
           docker-registry: docker-all.repo.sonatype.com
           docker-username: ${{ secrets.DOCKER_USERNAME }}
