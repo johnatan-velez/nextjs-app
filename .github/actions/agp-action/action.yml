@@ -147,6 +147,7 @@ runs:
           -w /github/workspace \
           --entrypoint /bin/bash \
           -e ANTHROPIC_API_KEY \
+          -e ANTHROPIC_BASE_URL \
           -e AGP_API_TOKEN \
           -e AGP_API_URL \
           -e GITHUB_TOKEN \
