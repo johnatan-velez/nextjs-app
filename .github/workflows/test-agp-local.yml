@@ -51,10 +51,9 @@ jobs:
           git-user-email: ${{ inputs.git-user-email }}
 
           # Docker Registry Configuration
-          # Omitido: self-hosted runner ya tiene acceso
           docker-registry: docker-all.repo.sonatype.com
-          # docker-username: ${{ secrets.DOCKER_USERNAME }}
-          # docker-password: ${{ secrets.DOCKER_PASSWORD }}
+          docker-username: ${{ secrets.DOCKER_USERNAME }}
+          docker-password: ${{ secrets.DOCKER_PASSWORD }}
 
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
