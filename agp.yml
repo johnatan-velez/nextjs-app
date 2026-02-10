@@ -2,8 +2,9 @@
 version: "1"
 
 # Enable AI agent for fixing validation failures
+# Temporarily disabled: macOS binary can't run in Linux container
 agent:
-  enabled: true
+  enabled: false
   model: "claude-sonnet-4-5"
   maxFixAttempts: 3
 
