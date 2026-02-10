@@ -15,7 +15,7 @@ api:
 agent:
   enabled: true                          # Enable AI agent
   provider: "anthropic"                  # AI provider (default: anthropic)
-  model: "claude-sonnet-4-5"            # Model to use
+  model: "claude-sonnet-4-20250514"      # Model to use
   maxIterations: 10                      # Max agent loops per fix
   maxFixAttempts: 3                      # Max fix attempts per group
   apiKeyEnv: "ANTHROPIC_API_KEY"        # Env var for API key
