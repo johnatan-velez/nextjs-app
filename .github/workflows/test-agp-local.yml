@@ -14,17 +14,17 @@ on:
       git-user-name:
         description: 'Git user name for commits'
         required: false
-        default: 'johnatan-velez'
+        default: 'AGP Bot'
         type: string
       git-user-email:
         description: 'Git user email for commits'
         required: false
-        default: 'jonathan.v.giraldo@gmail.com'
+        default: 'agp-bot@example.com'
         type: string
 
 jobs:
   test-agp-local:
-    runs-on: self-hosted  # ← Tu Mac runner
+    runs-on: self-hosted
 
     permissions:
       contents: write
@@ -34,7 +34,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Test AGP Action (Local Copy for Testing)
+      - name: Run AGP Action
         uses: ./.github/actions/agp-action
         with:
           working-directory: '.'
@@ -63,10 +63,9 @@ jobs:
           AGP_API_URL: ${{ secrets.AGP_API_URL }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Test Summary
+      - name: Workflow Summary
         if: always()
         run: |
-          echo "✅ Test completed on self-hosted runner"
-          echo "Action: Local copy (mirrors sonatype/agp-action@v1)"
-          echo "Dry run: ${{ inputs.dry-run }}"
+          echo "✅ AGP workflow completed"
+          echo "Dry run mode: ${{ inputs.dry-run }}"
           echo "Git user: ${{ inputs.git-user-name }} <${{ inputs.git-user-email }}>"
