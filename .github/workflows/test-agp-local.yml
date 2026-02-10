@@ -42,6 +42,7 @@ jobs:
           draft-pr: true
           dry-run: ${{ inputs.dry-run }}
           verbose: true
+          enable-agent: false  # Disabled: Claude Code CLI requires interactive login
           validation-commands: |
             npm run build
             npm test
