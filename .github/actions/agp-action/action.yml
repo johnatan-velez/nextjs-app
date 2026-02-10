@@ -131,14 +131,14 @@ runs:
         INPUT_GIT_USER_NAME: ${{ inputs.git-user-name }}
         INPUT_GIT_USER_EMAIL: ${{ inputs.git-user-email }}
       run: |
-        # Determine Docker image to use
+        # TEMPORARY: Use local test image instead of pulling from registry
         REGISTRY="${{ inputs.docker-registry }}"
-        IMAGE="${REGISTRY}/sonatype/agp:latest"
+        IMAGE="${REGISTRY}/sonatype/agp:test"
 
-        echo "📦 Using AGP Docker image: ${IMAGE}"
+        echo "📦 Using AGP Docker image: ${IMAGE} (local test build)"
 
-        # Pull the image
-        docker pull "${IMAGE}"
+        # Skip pull - using local image
+        # docker pull "${IMAGE}"
 
         # Run AGP container (gh CLI included in image)
         # Install Claude Code at runtime as temporary workaround
