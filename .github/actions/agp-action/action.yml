@@ -142,7 +142,9 @@ runs:
 
         # Run AGP container (gh CLI included in image)
         # Install Claude Code at runtime as temporary workaround
+        # Force linux/amd64 platform for compatibility with ARM64 Macs
         docker run --rm \
+          --platform linux/amd64 \
           -v "${{ github.workspace }}:/github/workspace" \
           -w /github/workspace \
           --entrypoint /bin/bash \
