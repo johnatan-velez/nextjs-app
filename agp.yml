@@ -9,8 +9,9 @@ agent:
   maxFixAttempts: 3
 
 # Validation commands to run after applying updates
+# Disabled: nextjs-app requires DB credentials
 validation:
-  enabled: true
+  enabled: false
   commands:
     - npm run build
     - npm test
