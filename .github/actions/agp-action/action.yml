@@ -141,10 +141,11 @@ runs:
         docker pull "${IMAGE}"
 
         # Run AGP container (gh CLI included in image)
+        # Install Claude Code at runtime as temporary workaround
         docker run --rm \
           -v "${{ github.workspace }}:/github/workspace" \
-          -v "$HOME/.local/bin/claude:/usr/local/bin/claude:ro" \
           -w /github/workspace \
+          --entrypoint /bin/bash \
           -e ANTHROPIC_API_KEY \
           -e AGP_API_TOKEN \
           -e AGP_API_URL \
@@ -171,7 +172,8 @@ runs:
           -e INPUT_VERBOSE \
           -e INPUT_GIT_USER_NAME \
           -e INPUT_GIT_USER_EMAIL \
-          "${IMAGE}"
+          "${IMAGE}" \
+          -c "npm install -g @anthropic-ai/claude-code && /entrypoint.sh"
 
     # Parse outputs from AGP run (if any)
     - name: Parse Outputs
