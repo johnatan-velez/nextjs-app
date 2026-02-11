@@ -133,8 +133,8 @@ runs:
       run: |
         # Determine Docker image to use
         REGISTRY="${{ inputs.docker-registry }}"
-        # Testing PR #1452 - GUIDE-1418 agent authentication fix (cli.js executable)
-        IMAGE="${REGISTRY}/sonatype/agp:guide-1418-fix-agent-authentication-14-4037d180"
+        # Testing PR #1452 - GUIDE-1418 agent auth fix (non-root user)
+        IMAGE="${REGISTRY}/sonatype/agp:guide-1418-fix-agent-authentication-16-956be725"
 
         echo "📦 Using AGP Docker image: ${IMAGE}"
 
