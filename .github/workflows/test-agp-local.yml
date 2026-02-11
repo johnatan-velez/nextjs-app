@@ -42,7 +42,7 @@ jobs:
           draft-pr: true
           dry-run: ${{ inputs.dry-run }}
           verbose: true
-          enable-agent: false  # Disabled for demos (requires auth setup)
+          enable-agent: true  # Testing PR #1452 - GUIDE-1418 agent authentication fix
           validation-commands: |
             npm run build
             npm test
@@ -57,8 +57,8 @@ jobs:
           docker-password: ${{ secrets.DOCKER_PASSWORD }}
 
         env:
-          # ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}  # Uncomment when agent is enabled
-          # ANTHROPIC_BASE_URL: "https://api.anthropic.com"
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}  # Testing PR #1452
+          ANTHROPIC_BASE_URL: "https://api.anthropic.com"
           AGP_API_TOKEN: ${{ secrets.AGP_API_TOKEN }}
           AGP_API_URL: ${{ secrets.AGP_API_URL }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
