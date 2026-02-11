@@ -57,7 +57,7 @@ jobs:
           git-user-email: ${{ inputs.git-user-email }}
 
           # Docker Registry Configuration (Sonatype internal)
-          docker-registry: docker-all.repo.sonatype.com
+          docker-registry: sonatype.repo.sonatype.app/docker-all
           docker-username: ${{ secrets.DOCKER_USERNAME }}
           docker-password: ${{ secrets.DOCKER_PASSWORD }}
 
@@ -72,6 +72,6 @@ jobs:
           echo "✅ Test completed"
           echo ""
           echo "Action tested: sonatype/agp-action@v1"
-          echo "Registry used: docker-all.repo.sonatype.com"
+          echo "Registry used: sonatype.repo.sonatype.app/docker-all"
           echo "Dry run: ${{ inputs.dry-run }}"
           echo "Git user: ${{ inputs.git-user-name }} <${{ inputs.git-user-email }}>"

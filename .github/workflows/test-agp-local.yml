@@ -52,7 +52,7 @@ jobs:
           git-user-email: ${{ inputs.git-user-email }}
 
           # Docker Registry Configuration
-          docker-registry: docker-all.repo.sonatype.com
+          docker-registry: sonatype.repo.sonatype.app/docker-all
           docker-username: ${{ secrets.DOCKER_USERNAME }}
           docker-password: ${{ secrets.DOCKER_PASSWORD }}
 

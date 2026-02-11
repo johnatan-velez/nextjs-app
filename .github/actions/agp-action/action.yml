@@ -69,11 +69,11 @@ inputs:
     default: "agp-bot@sonatype.com"
   # Docker registry configuration
   docker-registry:
-    description: "Docker registry to pull AGP image from (default: ghcr.io, supports docker-all.repo.sonatype.com)"
+    description: "Docker registry to pull AGP image from (default: ghcr.io, supports sonatype.repo.sonatype.app/docker-all)"
     required: false
     default: "ghcr.io"
   docker-username:
-    description: "Docker registry username (required only for private registries like docker-all.repo.sonatype.com)"
+    description: "Docker registry username (required only for private registries like sonatype.repo.sonatype.app/docker-all)"
     required: false
     default: ""
   docker-password:
