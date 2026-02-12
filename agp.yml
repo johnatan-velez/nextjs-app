@@ -27,7 +27,7 @@ agent:
 # ━━━ Validation Configuration ━━━
 # Commands to run after applying updates
 validation:
-  enabled: false                         # Disabled: requires DB credentials
+  enabled: true                          # Enable validation to test agent fixes
   commands:
     - npm run build
     - npm test
