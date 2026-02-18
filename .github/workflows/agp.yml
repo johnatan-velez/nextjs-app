@@ -18,14 +18,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Print inputs (for testing)
-        run: |
-          echo "Mode: ${{ inputs.mode }}"
-          echo "Vulnerabilities: ${{ inputs.vulnerabilities }}"
-
-      # TODO: Replace with actual AGP action once ready
-      # - name: Run AGP
-      #   uses: sonatype/agp-action@main
-      #   with:
-      #     mode: ${{ inputs.mode }}
-      #     vulnerabilities: ${{ inputs.vulnerabilities }}
+      - name: Run AGP
+        uses: sonatype/agp-action@main
+        with:
+          mode: ${{ inputs.mode }}
+          vulnerabilities: ${{ inputs.vulnerabilities }}
+          create-pr: 'true'
+          dry-run: 'false'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          AGP_API_TOKEN: ${{ secrets.AGP_API_TOKEN }}
+          AGP_API_URL: ${{ vars.AGP_API_URL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
