@@ -1,0 +1,31 @@
+name: AGP Security Fix
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Run mode: full or security'
+        required: false
+        default: 'security'
+      vulnerabilities:
+        description: 'JSON array of vulnerabilities to fix'
+        required: false
+
+jobs:
+  security-fix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Print inputs (for testing)
+        run: |
+          echo "Mode: ${{ inputs.mode }}"
+          echo "Vulnerabilities: ${{ inputs.vulnerabilities }}"
+
+      # TODO: Replace with actual AGP action once ready
+      # - name: Run AGP
+      #   uses: sonatype/agp-action@main
+      #   with:
+      #     mode: ${{ inputs.mode }}
+      #     vulnerabilities: ${{ inputs.vulnerabilities }}
