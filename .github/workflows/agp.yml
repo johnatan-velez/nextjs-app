@@ -25,6 +25,7 @@ jobs:
           vulnerabilities: ${{ inputs.vulnerabilities }}
           create-pr: 'true'
           dry-run: 'false'
+          verbose: 'true'
           docker-registry: sonatype.repo.sonatype.app/docker-all
           docker-username: ${{ secrets.SONATYPE_DOCKER_USERNAME }}
           docker-password: ${{ secrets.SONATYPE_DOCKER_PASSWORD }}
