@@ -26,6 +26,7 @@ jobs:
           create-pr: 'true'
           dry-run: 'false'
           verbose: 'true'
+          npmrc-content: 'cmVnaXN0cnk9aHR0cHM6Ly9yZWdpc3RyeS5ucG1qcy5vcmcvCg=='
           docker-registry: sonatype.repo.sonatype.app/docker-all
           docker-username: ${{ secrets.SONATYPE_DOCKER_USERNAME }}
           docker-password: ${{ secrets.SONATYPE_DOCKER_PASSWORD }}
