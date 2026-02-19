@@ -147,11 +147,20 @@ runs:
         # Pull the image
         docker pull "${IMAGE}"
 
+        # Debug: show what inputs we received
+        echo "DEBUG: INPUT_MODE='$INPUT_MODE'"
+        echo "DEBUG: INPUT_VULNERABILITIES length=$(echo "$INPUT_VULNERABILITIES" | wc -c)"
+        if [ -n "$INPUT_VULNERABILITIES" ]; then
+          echo "DEBUG: INPUT_VULNERABILITIES first 200 chars: ${INPUT_VULNERABILITIES:0:200}"
+        fi
+
         # Use vulnerabilities input for security mode
         VULN_PACKAGES=""
         if [ "$INPUT_MODE" = "security" ] && [ -n "$INPUT_VULNERABILITIES" ]; then
           VULN_PACKAGES="$INPUT_VULNERABILITIES"
           echo "🔒 Security mode: passing $(echo "$VULN_PACKAGES" | jq 'length') vulnerable packages to CLI"
+        else
+          echo "DEBUG: Security mode check failed - mode='$INPUT_MODE', has_vulns=$([ -n "$INPUT_VULNERABILITIES" ] && echo 'yes' || echo 'no')"
         fi
 
         # Run AGP container (gh CLI included in image)
