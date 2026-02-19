@@ -25,6 +25,8 @@ jobs:
           vulnerabilities: ${{ inputs.vulnerabilities }}
           create-pr: 'true'
           dry-run: 'false'
+          docker-username: ${{ github.actor }}
+          docker-password: ${{ secrets.GHCR_TOKEN }}
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           AGP_API_TOKEN: ${{ secrets.AGP_API_TOKEN }}
