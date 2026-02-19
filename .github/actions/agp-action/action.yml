@@ -140,7 +140,7 @@ runs:
       run: |
         # Determine Docker image to use
         REGISTRY="${{ inputs.docker-registry }}"
-        IMAGE="${REGISTRY}/sonatype/agp:guide-security-mode-cli-5-58322231"
+        IMAGE="${REGISTRY}/sonatype/agp:guide-security-mode-cli-6-74944276"
 
         echo "📦 Using AGP Docker image: ${IMAGE}"
 
