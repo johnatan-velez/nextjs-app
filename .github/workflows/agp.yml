@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run AGP
-        uses: sonatype/agp-action@main
+        uses: ./.github/actions/agp-action
         with:
           mode: ${{ inputs.mode }}
           vulnerabilities: ${{ inputs.vulnerabilities }}
