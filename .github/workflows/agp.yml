@@ -2,6 +2,14 @@ name: AGP Security Fix
 
 on:
   workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Run mode: full or security'
+        required: false
+        default: 'full'
+      vulnerabilities:
+        description: 'JSON array of vulnerabilities to fix'
+        required: false
 
 jobs:
   security-fix:
@@ -13,6 +21,8 @@ jobs:
       - name: Run AGP
         uses: ./.github/actions/agp-action
         with:
+          mode: ${{ inputs.mode }}
+          vulnerabilities: ${{ inputs.vulnerabilities }}
           create-pr: 'true'
           dry-run: 'false'
           docker-registry: sonatype.repo.sonatype.app/docker-all
