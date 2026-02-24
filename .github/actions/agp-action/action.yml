@@ -140,7 +140,7 @@ runs:
       run: |
         # Determine Docker image to use
         REGISTRY="${{ inputs.docker-registry }}"
-        IMAGE="${REGISTRY}/sonatype/agp:guide-security-mode-cli-6-74944276"
+        IMAGE="${REGISTRY}/sonatype/agp:guide-1554-auto-create-agp-workflow-8-90b29957"
 
         echo "📦 Using AGP Docker image: ${IMAGE}"
 
@@ -164,9 +164,13 @@ runs:
         fi
 
         # Run AGP container (gh CLI included in image)
+        # Note: We add git safe.directory config to handle GitHub Actions checkout
         docker run --rm \
           -v "${{ github.workspace }}:/github/workspace" \
           -w /github/workspace \
+          -e GIT_CONFIG_COUNT=1 \
+          -e GIT_CONFIG_KEY_0=safe.directory \
+          -e GIT_CONFIG_VALUE_0=/github/workspace \
           -e ANTHROPIC_API_KEY \
           -e ANTHROPIC_BASE_URL \
           -e AGP_API_TOKEN \
@@ -174,6 +178,7 @@ runs:
           -e GITHUB_TOKEN \
           -e GH_TOKEN="${{ env.GITHUB_TOKEN }}" \
           -e GITHUB_REPOSITORY="${{ github.repository }}" \
+          -e GITHUB_ACTIONS=true \
           -e GH_DEBUG=api \
           -e GIT_AUTHOR_NAME="${{ inputs.git-user-name }}" \
           -e GIT_AUTHOR_EMAIL="${{ inputs.git-user-email }}" \
